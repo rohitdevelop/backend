@@ -1,23 +1,31 @@
-require('dotenv').config();
-const express = require('express');
+ const express = require('express')
+ const path = require('path')
+ 
+ const app = express()
+ 
+ app.use(express.json())
 
-const server = express();
+ app.get('/',(req, res)=>{
+res.sendFile(path.join(__dirname, 'index.html'))
+  })
 
-server.get('/', (req, res) => {
-  res.send('<h1>hello root </h1>');
-});
-server.get('/about', (req, res) => {
-  res.send('<h1>hello about</h1>');
-});
-server.get('/contact', (req, res) => {
-  res.send('<h1>hello contact </h1>');
-});
-server.get('/info', (req, res) => {
-  res.send('<h1>hello info </h1>');
-});
 
-const port = 3000;
+app.post('/contact',(req,res)=>{
+const {name , email , massage} = req.body
 
-server.listen(process.env.PORT, () => {
-  console.log(`hello set http://localhost:${port}`);
-});
+if (!name || !email|| !massage) {
+  return res.status(400).json({massage: false , massage: 'faill to load'})
+}
+ 
+res.status(200).json({
+  name:true,
+  massage:`its done ${name}`
+})
+
+})
+
+ const port = process.env.PORT || 3000;
+
+ app.listen(port, () => {
+   console.log(`Server is running at http://localhost:${port}`);
+ });
